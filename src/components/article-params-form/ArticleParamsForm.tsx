@@ -7,70 +7,57 @@ import clsx from 'clsx';
 import { useClose } from '../hooks/useClose';
 import { Select } from 'src/ui/select';
 import { Text } from 'src/ui/text';
-import { StoryDecorator } from 'src/ui/story-decorator';
-import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr, OptionType, ArticleStateType, defaultArticleState, } from 'src/constants/articleProps';
+import { 
+	fontFamilyOptions, 
+	fontSizeOptions, 
+	fontColors, 
+	backgroundColors, 
+	contentWidthArr, 
+	OptionType, 
+	ArticleStateType, 
+	defaultArticleState, 
+} 
+from 'src/constants/articleProps';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 
 
 export type ArticleParamsFormProps = {
-	onChange: React.Dispatch<React.SetStateAction<ArticleStateType>>;
+	onChange: (currentArticleStyle: ArticleStateType) => void;
 };
 
 export const ArticleParamsForm = ({onChange}: ArticleParamsFormProps) => {
-	const defaultState = useRef<ArticleStateType>(defaultArticleState);
-	const divRef = useRef<HTMLDivElement | null>(null);
+	const menuDivRef = useRef<HTMLDivElement | null>(null);
 
-	const [isMenuOpenButton, setIsMenuOpenButton] = useState<boolean>(false);
-	const {isOpen, toggle, close} = useClose(isMenuOpenButton);
+	const {isOpen, toggle, close} = useClose(false);
 
-	const [fontFamily, setfontFamily] = useState<OptionType>
+	const [fontFamily, setFontFamily] = useState<OptionType>
 	(
-		defaultState.current.fontFamilyOption
+		defaultArticleState.fontFamilyOption
 	);
-	const [fontSize, setfontSize] = useState<OptionType>
+	const [fontSize, setFontSize] = useState<OptionType>
 	(
-		defaultState.current.fontSizeOption
+		defaultArticleState.fontSizeOption
 	);
 	const [backgroundColor, setBackgroundColor] = useState<OptionType>
 	(
-		defaultState.current.backgroundColor
+		defaultArticleState.backgroundColor
 	);
 	const [fontColor, setFontColor] = useState<OptionType>
 	(
-		defaultState.current.fontColor
+		defaultArticleState.fontColor
 	);
 	const [contentWidth, setContentWidth] = useState<OptionType>
 	(
-		defaultState.current.contentWidth
+		defaultArticleState.contentWidth
 	);
- 
-	const changeFontFamily = (option: OptionType) => {
-		setfontFamily(option);
-	};
-
-	const changefontSize = (option: OptionType) => {
-		setfontSize(option);
-	};
-
-	const changeFontColor = (option: OptionType) => {
-		setFontColor(option);
-	};
-
-	const changeBackgroundColor= (option: OptionType) => {
-		setBackgroundColor(option);
-	};
-
-	const changeContentWidth= (option: OptionType) => {
-		setContentWidth(option);
-	};
 
 	useOutsideClickClose({
-		isOpen: isMenuOpenButton,
-		rootRef: divRef,
+		isOpen: false,
+		rootRef: menuDivRef,
 		onChange: close,
-		onClose: () => setIsMenuOpenButton(false),
+		onClose: () => close(),
 	});
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -84,56 +71,56 @@ export const ArticleParamsForm = ({onChange}: ArticleParamsFormProps) => {
 		})
 	}
 
-	const handleOnClickButtonReset = () => {
-		onChange(defaultState.current);
-		setfontFamily(defaultState.current.fontFamilyOption);
-		setfontSize(defaultState.current.fontSizeOption);
-		setBackgroundColor(defaultState.current.backgroundColor);
-		setFontColor(defaultState.current.fontColor);
-		setContentWidth(defaultState.current.contentWidth);
+	const handleReset = () => {
+		onChange(defaultArticleState);
+		setFontFamily(defaultArticleState.fontFamilyOption);
+		setFontSize(defaultArticleState.fontSizeOption);
+		setBackgroundColor(defaultArticleState.backgroundColor);
+		setFontColor(defaultArticleState.fontColor);
+		setContentWidth(defaultArticleState.contentWidth);
 	};
 
 
 	return (
-		<div ref={divRef}>
+		<div ref={menuDivRef}>
 			<ArrowButton isOpen={isOpen} onClick={toggle} />
 			<aside className={clsx(styles.container, {
 					[styles.container_open]: isOpen,
 				})}>
-				<form className={styles.form} onSubmit={handleSubmit} onReset={handleOnClickButtonReset}>
+				<form className={styles.form} onSubmit={handleSubmit} onReset={handleReset}>
 					<Text as='h2' size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
 					<Select
 						options={fontFamilyOptions}
 						selected={fontFamily}
-						onChange={changeFontFamily}
+						onChange={setFontFamily}
 						title='Шрифт'
 					/>
 					<RadioGroup 
 						options={fontSizeOptions}
 						selected={fontSize}
-						onChange={changefontSize}
+						onChange={setFontSize}
 						title='Размер текста'
 						name='fontSize'
 					/>
 					<Select
 						options={fontColors}
 						selected={fontColor}
-						onChange={changeFontColor}
+						onChange={setFontColor}
 						title='Цвет шрифта'
 					/>
 					<Separator />
 					<Select
 						options={backgroundColors}
 						selected={backgroundColor}
-						onChange={changeBackgroundColor}
+						onChange={setBackgroundColor}
 						title='Цвет фона'
 					/>
 					<Select
 						options={contentWidthArr}
 						selected={contentWidth}
-						onChange={changeContentWidth}
+						onChange={setContentWidth}
 						title='Ширина контента'
 					/>
 					<div className={styles.bottomContainer}>
