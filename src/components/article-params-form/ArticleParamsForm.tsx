@@ -25,19 +25,24 @@ export const ArticleParamsForm = ({onChange}: ArticleParamsFormProps) => {
 	const [isMenuOpenButton, setIsMenuOpenButton] = useState<boolean>(false);
 	const {isOpen, toggle, close} = useClose(isMenuOpenButton);
 
-	const [fontFamily, setfontFamily] = useState<OptionType>(
+	const [fontFamily, setfontFamily] = useState<OptionType>
+	(
 		defaultState.current.fontFamilyOption
 	);
-	const [fontSize, setfontSize] = useState<OptionType>(
+	const [fontSize, setfontSize] = useState<OptionType>
+	(
 		defaultState.current.fontSizeOption
 	);
-	const [backgroundColor, setBackgroundColor] = useState<OptionType>(
+	const [backgroundColor, setBackgroundColor] = useState<OptionType>
+	(
 		defaultState.current.backgroundColor
 	);
-	const [fontColor, setFontColor] = useState<OptionType>(
+	const [fontColor, setFontColor] = useState<OptionType>
+	(
 		defaultState.current.fontColor
 	);
-	const [contentWidth, setContentWidth] = useState<OptionType>(
+	const [contentWidth, setContentWidth] = useState<OptionType>
+	(
 		defaultState.current.contentWidth
 	);
  
